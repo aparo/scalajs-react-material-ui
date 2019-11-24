@@ -23,7 +23,7 @@ object Settings {
       val scalaCss = "0.5.6"
       val scalajsDom = "0.9.7"
       val catsCore = "2.0.0"
-      val scalajsReactBridge = "0.8.0"
+      val scalajsReactBridge = "0.8.1"
     }
 
     object npm {
