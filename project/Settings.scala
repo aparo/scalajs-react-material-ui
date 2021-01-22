@@ -31,8 +31,8 @@ object Settings {
 
       val reactSwipeableViews = "0.13.3"
 
-      val materialUi = "3.9.0"
-      val materialUiIcons = "3.0.2"
+      val materialUi = "4.7.0" //"3.9.0"
+      val materialUiIcons = "4.5.1" //"3.0.2"
     }
   }
 

@@ -1,6 +1,6 @@
 resolvers += Resolver.bintrayRepo("oyvindberg", "ScalablyTyped")
 
-addSbtPlugin("org.scalablytyped" % "sbt-scalablytyped" % "201911230336")
+addSbtPlugin("org.scalablytyped" % "sbt-scalablytyped" % "201910260951")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.31")
 
