@@ -1,9 +1,9 @@
 package io.kinoplan.scalajs.react.material.ui.core
 
-import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
+
+import io.kinoplan.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
 
 object MuiCardActionArea extends ReactBridgeComponent with MuiCardActionAreaExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
@@ -15,9 +15,9 @@ object MuiCardActionArea extends ReactBridgeComponent with MuiCardActionAreaExte
   def apply(
     classes: js.UndefOr[Map[ClassKey.Value, String]] = js.undefined,
     action: js.UndefOr[js.Function] = js.undefined,
-    buttonRef: OptComponentRefType = js.undefined,
+    buttonRef: js.UndefOr[ComponentRefType] = js.undefined,
     centerRipple: js.UndefOr[Boolean] = js.undefined,
-    component: OptComponentPropType = js.undefined,
+    component: js.UndefOr[ComponentPropType] = js.undefined,
     disableRipple: js.UndefOr[Boolean] = js.undefined,
     disableTouchRipple: js.UndefOr[Boolean] = js.undefined,
     focusRipple: js.UndefOr[Boolean] = js.undefined,

@@ -1,11 +1,12 @@
 package io.kinoplan.scalajs.react.material.ui.core
 
-import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-import org.scalajs.dom.html
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
+
+import org.scalajs.dom.html
+
+import io.kinoplan.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
 
 object MuiGrow extends ReactBridgeComponent with MuiGrowExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
@@ -22,12 +23,12 @@ object MuiGrow extends ReactBridgeComponent with MuiGrowExtensions {
     enter: js.UndefOr[Boolean] = js.undefined,
     exit: js.UndefOr[Boolean] = js.undefined,
     timeout: js.UndefOr[Int | Timeout.Value] = js.undefined,
-    onEnter: Handler1[html.Element] = js.undefined,
-    onEntering: Handler1[html.Element] = js.undefined,
-    onEntered: Handler1[html.Element] = js.undefined,
-    onExit: Handler1[html.Element] = js.undefined,
-    onExiting: Handler1[html.Element] = js.undefined,
-    onExited: Handler1[html.Element] = js.undefined
+    onEnter: js.UndefOr[Handler1[html.Element]] = js.undefined,
+    onEntering: js.UndefOr[Handler1[html.Element]] = js.undefined,
+    onEntered: js.UndefOr[Handler1[html.Element]] = js.undefined,
+    onExit: js.UndefOr[Handler1[html.Element]] = js.undefined,
+    onExiting: js.UndefOr[Handler1[html.Element]] = js.undefined,
+    onExited: js.UndefOr[Handler1[html.Element]] = js.undefined
   ): WithProps = auto
 }
 

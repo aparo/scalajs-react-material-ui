@@ -1,14 +1,15 @@
 package io.kinoplan.demo.components.demos.Progress
 
+import scala.scalajs.js
+import scala.scalajs.js.Math
+
+import japgolly.scalajs.react.{BackendScope, Callback, ScalaComponent}
+import japgolly.scalajs.react.vdom.all._
+import scalacss.ScalaCssReactImplicits
+
 import io.kinoplan.demo.components.ComponentContainer
 import io.kinoplan.demo.styles.{CommonStyle, DefaultCommonStyle}
 import io.kinoplan.scalajs.react.material.ui.core.MuiLinearProgress
-import japgolly.scalajs.react.vdom.all._
-import japgolly.scalajs.react.{BackendScope, Callback, ScalaComponent}
-import scalacss.ScalaCssReactImplicits
-
-import scala.scalajs.js
-import scala.scalajs.js.Math
 
 object LinearDeterminate extends ScalaCssReactImplicits {
   case class Props(style: CommonStyle)
@@ -64,7 +65,7 @@ object LinearDeterminate extends ScalaCssReactImplicits {
   private val component = ScalaComponent.builder[Props]("LinearDeterminate")
     .initialState(State())
     .renderBackend[Backend]
-    .componentWillMount(_.backend.mount)
+    .componentDidMount(_.backend.mount)
     .componentWillUnmount(_.backend.unmount)
     .build
 

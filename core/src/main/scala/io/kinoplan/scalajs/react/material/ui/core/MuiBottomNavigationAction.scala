@@ -1,12 +1,13 @@
 package io.kinoplan.scalajs.react.material.ui.core
 
-import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-import japgolly.scalajs.react.vdom.html_<^._
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-object MuiBottomNavigationAction extends ReactBridgeComponent with MuiBottomNavigationActionExtensions with JsWriterImplicits {
+import japgolly.scalajs.react.vdom.html_<^._
+
+import io.kinoplan.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
+
+object MuiBottomNavigationAction extends ReactBridgeComponent with MuiBottomNavigationActionExtensions {
   override protected lazy val componentValue: js.Object = RawComponent
 
   @JSImport("@material-ui/core", "BottomNavigationAction")
@@ -19,9 +20,9 @@ object MuiBottomNavigationAction extends ReactBridgeComponent with MuiBottomNavi
     label: js.UndefOr[VdomNode] = js.undefined,
     showLabel: js.UndefOr[Boolean] = js.undefined,
     action: js.UndefOr[js.Function] = js.undefined,
-    buttonRef: OptComponentRefType = js.undefined,
+    buttonRef: js.UndefOr[ComponentRefType] = js.undefined,
     centerRipple: js.UndefOr[Boolean] = js.undefined,
-    component: OptComponentPropType = js.undefined,
+    component: js.UndefOr[ComponentPropType] = js.undefined,
     disableRipple: js.UndefOr[Boolean] = js.undefined,
     disableTouchRipple: js.UndefOr[Boolean] = js.undefined,
     focusRipple: js.UndefOr[Boolean] = js.undefined,

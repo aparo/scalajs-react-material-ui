@@ -1,71 +1,131 @@
-addCommandAlias("restartWDS", "; demo/fastOptJS::stopWebpackDevServer; ~demo/fastOptJS::startWebpackDevServer")
+lazy val root =
+  if (Settings.isDemoEnabled)
+    project.in(file(".")).aggregate(core, icons, lab, bridge, demo).configure(Settings.rootProject)
+  else
+    project.in(file(".")).aggregate(core, icons, lab, bridge).configure(Settings.rootProject)
 
-lazy val root = project.in(file(".")).settings(commonSettings).aggregate(core, icons, demo).settings(
-  name                 := "scalajs-react-material-ui",
-  // No, SBT, we don't want any artifacts for root.
-  // No, not even an empty jar.
-  publish              := {},
-  publishLocal         := {},
-  publishArtifact      := false,
-  Keys.`package`       := file(""),
-).settings(
-  aggregate in doc := false
+inThisBuild(
+  List(
+    organization := Settings.organization,
+    homepage := Some(url("https://github.com/kinoplan/scalajs-react-material-ui")),
+    licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+    developers := List(
+      Developer(
+        "kinoplan",
+        "Kinoplan",
+        "job@kinoplan.ru",
+        url("https://kinoplan.tech")
+      )
+    ),
+    scmInfo := Some(
+      ScmInfo(
+        url("https://github.com/kinoplan/scalajs-react-material-ui"),
+        "scm:git:git@github.com:kinoplan/scalajs-react-material-ui.git"
+      )
+    )
+  )
 )
 
 lazy val muiColorsGenerator = taskKey[Seq[File]]("mui-colors-generator")
 
-lazy val core = (project in file("core")).settings(commonSettings).settings(
+lazy val core = (project in file("core"))
+  .dependsOn(bridge)
+  .configure(commonProfile)
+  .settings(
   name := "scalajs-react-material-ui-core",
-  scalaJSUseMainModuleInitializer  := false,
-  npmDependencies in Compile ++= Settings.npmDependencies.value,
-  libraryDependencies ++= Settings.scalajsDependencies.value,
-  muiColorsGenerator := Settings.generateColors(
+  scalaJSUseMainModuleInitializer := false,
+  npmDependencies in Compile ++= Settings.npmDependenciesCore.value,
+  npmResolutions in Compile ++= (npmDependencies in Compile).value.toMap,
+  libraryDependencies ++= Settings.scalajsDependenciesLib.value,
+  muiColorsGenerator := Generator.muiColors(
     (sourceManaged in Compile).value / "io" / "kinoplan" / "scalajs" / "react" / "material" / "ui" / "core" / "colors",
     (npmInstallDependencies in Compile).value
   ),
   sourceGenerators in Compile += muiColorsGenerator.taskValue
-).enablePlugins(ScalaJSBundlerPlugin)
+)
 
 lazy val muiIconsGenerator = taskKey[Seq[File]]("mui-icons-generator")
 
-lazy val icons = (project in file("icons")).settings(commonSettings).settings(
+lazy val icons = (project in file("icons"))
+  .dependsOn(bridge)
+  .configure(commonProfile)
+  .settings(
   name := "scalajs-react-material-ui-icons",
-  scalaJSUseMainModuleInitializer  := false,
-  npmDependencies in Compile ++= Settings.npmDependencies.value,
-  libraryDependencies ++= Settings.scalajsDependencies.value,
-  muiIconsGenerator := Settings.generateIcons(
+  scalaJSUseMainModuleInitializer := false,
+  npmDependencies in Compile ++= Settings.npmDependenciesIcons.value,
+  npmResolutions in Compile ++= (npmDependencies in Compile).value.toMap,
+  libraryDependencies ++= Settings.scalajsDependenciesLib.value,
+  muiIconsGenerator := Generator.muiIcons(
     (sourceManaged in Compile).value / "io" / "kinoplan" / "scalajs" / "react" / "material" / "ui" / "icons",
     (npmInstallDependencies in Compile).value
   ),
   sourceGenerators in Compile += muiIconsGenerator.taskValue
-).enablePlugins(ScalaJSBundlerPlugin)
+)
 
-lazy val demo = (project in file("demo")).dependsOn(core)
-  .settings(commonSettings).settings(
-  scalaJSUseMainModuleInitializer  := true,
-  npmDependencies in Compile ++= Settings.npmDependencies.value,
-  libraryDependencies ++= Settings.scalajsDependencies.value,
-  webpackDevServerExtraArgs        := Seq("--inline"),
-  yarnExtraArgs                    := Seq("--silent"),
-  webpackConfigFile in fastOptJS   := Some(baseDirectory.value / "dev.webpack.config.js"),
-  // don't publish the demo
-  publish                          := {},
-  publishLocal                     := {},
-  publishArtifact                  := false,
-  Keys.`package`                   := file("")
-).enablePlugins(ScalaJSBundlerPlugin, WorkbenchPlugin)
+lazy val lab = (project in file("lab"))
+  .dependsOn(bridge)
+  .configure(commonProfile)
+  .settings(
+  name := "scalajs-react-material-ui-lab",
+  scalaJSUseMainModuleInitializer := false,
+  npmDependencies in Compile ++= Settings.npmDependenciesLab.value,
+  npmResolutions in Compile ++= (npmDependencies in Compile).value.toMap,
+  libraryDependencies ++= Settings.scalajsDependenciesLib.value
+)
 
-lazy val commonSettings = Seq(
-  version := Settings.version,
-  scalaVersion := Settings.versions.scala,
-  organization := Settings.organization,
+lazy val demo = (project in file("demo")).dependsOn(core, lab, bridge)
+  .configure(commonProfile).settings(
+  scalaJSUseMainModuleInitializer := true,
+  scalaJSLinkerConfig ~= (_.withSourceMap(false)),
+  stUseScalaJsDom := false,
+  stFlavour := Flavour.Japgolly,
+  stIgnore ++= Settings.stIgnore,
+  stOutputPackage := "io.kinoplan.scalajs.react.libs.external",
+  npmDependencies in Compile ++= Settings.npmDependenciesDemo.value,
+  npmResolutions in Compile ++= (npmDependencies in Compile).value.toMap,
+  libraryDependencies ++= Settings.scalajsDependenciesDemo.value,
+  webpackDevServerExtraArgs := Seq("--inline"),
+  yarnExtraArgs := Seq("--silent"),
+  webpackConfigFile in fastOptJS := Some(baseDirectory.value / "dev.webpack.config.js"),
+  skip in publish := true
+).enablePlugins(ScalablyTypedConverterPlugin)
+
+lazy val bridge = (project in file("utils/bridge"))
+  .configure(commonProfile)
+  .settings(
+  name := "scalajs-react-bridge",
+  scalaJSUseMainModuleInitializer := false,
+  npmDependencies in Compile ++= Settings.npmDependenciesBridge.value,
+  npmResolutions in Compile ++= (npmDependencies in Compile).value.toMap,
+  libraryDependencies ++= Settings.scalajsDependenciesLib.value
+).enablePlugins(BridgeGeneratorPlugin)
+
+lazy val commonProfile: Project => Project  =
+  _.enablePlugins(ScalaJSBundlerPlugin, ScalafixPlugin).settings(
+  crossScalaVersions := Seq("2.12.11", "2.13.3"),
+  scalaVersion := crossScalaVersions.value.last,
   description := Settings.description,
   webpackBundlingMode := BundlingMode.LibraryOnly(),
   useYarn := true,
   version in webpack := Settings.versions.bundler.webpack,
   version in startWebpackDevServer := Settings.versions.bundler.webpackDev,
   webpackCliVersion := Settings.versions.bundler.webpackCli,
-  emitSourceMaps := false,
   javacOptions ++= Settings.javacOptions,
-  scalacOptions in ThisBuild ++= Settings.scalacOptions
+  scalacOptions ~= (_.filterNot(
+    Set(
+      "-Wdead-code",
+      "-Wunused:params",
+      "-Ywarn-dead-code",
+      "-Ywarn-unused:params",
+      "-Ywarn-unused:patvars",
+      "-Wunused:explicits"
+    )
+  ))
 )
+
+onLoad in Global := (
+  "project bridge" ::
+  "bridgeImplicitsGenerator" ::
+  "project root" ::
+  (_: State)
+) compose (onLoad in Global).value

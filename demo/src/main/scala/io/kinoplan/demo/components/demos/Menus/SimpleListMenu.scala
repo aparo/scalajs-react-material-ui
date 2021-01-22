@@ -1,15 +1,16 @@
 package io.kinoplan.demo.components.demos.Menus
 
-import io.kinoplan.demo.components.{ComponentContainer, Layout}
-import io.kinoplan.demo.styles.demos.Menus.{DefaultMenuStyle, MenuStyle}
-import io.kinoplan.scalajs.react.material.ui.core.{MuiList, MuiListItem, MuiListItemText, MuiMenu, MuiMenuItem}
+import scala.scalajs.js.JSConverters._
+
+import japgolly.scalajs.react.{BackendScope, Callback, ReactEvent, ReactEventFromHtml, ScalaComponent}
 import japgolly.scalajs.react.vdom.Attr
 import japgolly.scalajs.react.vdom.all._
-import japgolly.scalajs.react.{BackendScope, Callback, ReactEvent, ReactEventFromHtml, ScalaComponent}
 import org.scalajs.dom.raw.HTMLElement
 import scalacss.ScalaCssReactImplicits
 
-import scala.scalajs.js.JSConverters._
+import io.kinoplan.demo.components.{ComponentContainer, Layout}
+import io.kinoplan.demo.styles.demos.Menus.{DefaultMenuStyle, MenuStyle}
+import io.kinoplan.scalajs.react.material.ui.core.{MuiList, MuiListItem, MuiListItemText, MuiMenu, MuiMenuItem}
 
 object SimpleListMenu extends ScalaCssReactImplicits {
   case class Props(style: MenuStyle)
@@ -54,7 +55,7 @@ object SimpleListMenu extends ScalaCssReactImplicits {
           div(css.root,  css.rootPaper(Layout.isPaletteLight),
             MuiList(component = "nav")(
               MuiListItem(button = true)(
-                aria.hasPopup := "true",
+                aria.haspopup.`true`,
                 aria.controls := "lock-menu",
                 aria.label := "When device is locked",
                 onClick ==> handleClickListItem,

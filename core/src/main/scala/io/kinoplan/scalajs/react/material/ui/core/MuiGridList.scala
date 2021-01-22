@@ -1,10 +1,10 @@
 package io.kinoplan.scalajs.react.material.ui.core
 
-import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
+
+import io.kinoplan.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
 
 object MuiGridList extends ReactBridgeComponent with MuiGridListExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
@@ -16,7 +16,7 @@ object MuiGridList extends ReactBridgeComponent with MuiGridListExtensions {
   def apply(
     cellHeight: js.UndefOr[Int | CellHeight.Value] = js.undefined,
     classes: js.UndefOr[Map[ClassKey.Value, String]] = js.undefined,
-    component: OptComponentPropType = js.undefined,
+    component: js.UndefOr[ComponentPropType] = js.undefined,
     spacing: js.UndefOr[Int] = js.undefined
   ): WithProps = auto
 }

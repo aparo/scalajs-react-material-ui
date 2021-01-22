@@ -1,146 +1,72 @@
+import sbt.Keys._
 import sbt._
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
-import org.scalablytyped.sbt.ScalablyTypedPlugin.autoImport.ScalablyTyped
 
 object Settings {
-  val version = "0.0.1"
-
   val organization = "io.kinoplan"
 
   val description = "scalajs-react facade for material-ui"
 
+  val isScalaJSVersion06 = Option(System.getenv("SCALAJS_VERSION")).exists(_.startsWith("0.6"))
+
+  val isDemoEnabled = Option(System.getenv("DEMO_ENABLED")).getOrElse("1").startsWith("1")
+
+  val isPublishVersion = Option(System.getenv("PUBLISH_VERSION")).getOrElse("0").startsWith("1")
+
   object versions {
-    val scala = "2.12.10"
-
     object bundler {
-      val webpack = "4.41.2"
-      val webpackDev = "3.9.0"
-      val webpackCli = "3.3.9"
-    }
-
-    object scalajs {
-      val scalajsReact = "1.4.2"
-      val scalaCss = "0.5.6"
-      val scalajsDom = "0.9.7"
-      val catsCore = "2.0.0"
-      val scalajsReactBridge = "0.8.1"
-    }
-
-    object npm {
-      val react = "16.7.0"
-
-      val reactSwipeableViews = "0.13.3"
-
-      val materialUi = "4.7.0" //"3.9.0"
-      val materialUiIcons = "4.5.1" //"3.0.2"
+      val webpack = "4.41.5"
+      val webpackDev = "3.10.2"
+      val webpackCli = "3.3.10"
     }
   }
 
-  val scalajsDependencies = Def.setting(Seq(
-    "com.github.japgolly.scalajs-react" %%% "core"                 % versions.scalajs.scalajsReact,
-    "com.github.japgolly.scalajs-react" %%% "extra"                % versions.scalajs.scalajsReact,
-    "com.github.japgolly.scalacss"      %%% "core"                 % versions.scalajs.scalaCss,
-    "com.github.japgolly.scalacss"      %%% "ext-react"            % versions.scalajs.scalaCss,
-    "com.github.japgolly.scalacss"      %% "ext-scalatags"         % versions.scalajs.scalaCss,
-    "org.scala-js"                      %%% "scalajs-dom"          % versions.scalajs.scalajsDom,
-    "org.typelevel"                     %%% "cats-core"            % versions.scalajs.catsCore,
-    "com.payalabs"                      %%% "scalajs-react-bridge" % versions.scalajs.scalajsReactBridge,
-    ScalablyTyped.R.`react-swipeable-views`
+  val scalajsDependenciesLib = Def.setting(Seq(
+    Dependencies.scalaJsReactCore.value
   ))
 
-  val npmDependencies = Def.setting(Seq(
-    "react"                       -> versions.npm.react,
-    "react-dom"                   -> versions.npm.react,
-    "react-swipeable-views"       -> versions.npm.reactSwipeableViews,
-    "react-swipeable-views-utils" -> versions.npm.reactSwipeableViews,
-    "@material-ui/core"           -> versions.npm.materialUi,
-    "@material-ui/icons"          -> versions.npm.materialUiIcons
+  val scalajsDependenciesDemo = Def.setting(Seq(
+    Dependencies.catsCore.value,
+    Dependencies.scalaCssCore.value,
+    Dependencies.scalaCssExtReact.value,
+    Dependencies.scalaCssExtScalatags.value,
+    Dependencies.scalaJsDom.value,
+    Dependencies.scalaJsReactCore.value,
+    Dependencies.scalaJsReactExtra.value
   ))
 
-  def generateColors(src: File, npm: File): Seq[File] = {
-    val path = npm / "node_modules" / "@material-ui" / "core" / "colors"
-    val extensions = "*.js" -- "index.js" -- "index.es.js" -- "common.js"
+  val reactDependencies = Seq(
+    DependenciesNPM.react,
+    DependenciesNPM.reactDom
+  )
 
-    val colorSources = path * extensions
+  val npmDependenciesCore = Def.setting(reactDependencies ++ Seq(
+    DependenciesNPM.materialUiCore
+  ))
 
-    val colorsPackageFile = src / "package.scala"
+  val npmDependenciesIcons = Def.setting(reactDependencies ++ Seq(
+    DependenciesNPM.materialUiCore,
+    DependenciesNPM.materialUiIcons
+  ))
 
-    val colorsPackage = colorSources.get.sortBy(_.getName).map(file => {
-      val name = file.getName.stripSuffix(".js")
+  val npmDependenciesLab = Def.setting(reactDependencies ++ Seq(
+    DependenciesNPM.materialUiCore,
+    DependenciesNPM.materialUiLab
+  ))
 
-      s"""    @JSImport("@material-ui/core/colors/$name", JSImport.Default)
-         |    @js.native
-         |    object $name extends Color
-         |""".stripMargin
-    }).mkString(
-      start =
-        """package io.kinoplan.scalajs.react.material.ui.core
-          |
-          |import scala.scalajs.js
-          |import scala.scalajs.js.annotation.JSImport
-          |
-          |package object colors {
-          |
-          |""".stripMargin,
-      sep = "\n",
-      end =
-        """
-          |    @JSImport("@material-ui/core/colors/common", JSImport.Default)
-          |    @js.native
-          |    object common extends CommonColors
-          |}
-          |""".stripMargin
-    )
+  val npmDependenciesDemo = Def.setting(reactDependencies ++ Seq(
+    DependenciesNPM.materialUiCore,
+    DependenciesNPM.materialUiIcons,
+    DependenciesNPM.materialUiLab,
+    DependenciesNPM.reactSwipeableViews,
+    DependenciesNPM.reactSwipeableViewsUtils,
+    DependenciesNPM.typesReactSwipeableViewsUtils,
+    DependenciesNPM.typesReactSwipeableViews,
+    DependenciesNPM.typesReactSwipeableViewsUtils,
+    DependenciesNPM.typesReact,
+    DependenciesNPM.typesReactDom
+  ))
 
-    IO.write(colorsPackageFile, colorsPackage)
-
-    Seq(colorsPackageFile)
-  }
-
-  def generateIcons(src: File, npm: File): Seq[File] = {
-    val iconSources = (npm / "node_modules" / "@material-ui" / "icons" ) * ("*.js" -- "index.js" -- "index.es.js")
-
-    val files: Seq[File] = iconSources.get.map(f => {
-      val name = f.getName.stripSuffix(".js")
-      val file = src / s"Mui${name}Icon.scala"
-
-      IO.write(
-        file,
-        s"""package io.kinoplan.scalajs.react.material.ui.icons
-           |
-           |import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-           |
-           |import scala.scalajs.js
-           |import scala.scalajs.js.annotation.JSImport
-           |import scala.scalajs.js.|
-           |
-           |object Mui${name}Icon extends ReactBridgeComponent with SvgIconExtensions {
-           |
-           |  override protected lazy val componentValue: js.Object = RawComponent
-           |
-           |  @JSImport("@material-ui/icons/$name", JSImport.Default)
-           |  @js.native
-           |  object RawComponent extends js.Object
-           |
-           |  def apply(
-           |    classes: js.UndefOr[Map[ClassKey.Value, String]] = js.undefined,
-           |    color: js.UndefOr[Color.Value] = js.undefined,
-           |    component: js.UndefOr[String | js.Function] = js.undefined,
-           |    fontSize: js.UndefOr[FontSize.Value] = js.undefined,
-           |    nativeColor: js.UndefOr[String] = js.undefined,
-           |    shapeRendering: js.UndefOr[String] = js.undefined,
-           |    titleAccess: js.UndefOr[String] = js.undefined,
-           |    viewBox: js.UndefOr[String] = js.undefined
-           |  ): WithProps = auto
-           |}
-          """.stripMargin.trim
-      )
-
-      file
-    })
-
-    files
-  }
+  val npmDependenciesBridge = Def.setting(reactDependencies)
 
   val javacOptions = Seq(
     "-source", "1.8",
@@ -148,53 +74,21 @@ object Settings {
     "-Xlint"
   )
 
-  val scalacOptions = Seq(
-    "-target:jvm-1.8",
-    "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
-    "-encoding", "utf-8",                // Specify character encoding used by source files.
-    "-explaintypes",                     // Explain type errors in more detail.
-    "-feature",                          // Emit warning and location for usages of features that should be imported explicitly.
-    "-language:existentials",            // Existential types (besides wildcard types) can be written and inferred
-    "-language:experimental.macros",     // Allow macro definition (besides implementation and application)
-    "-language:higherKinds",             // Allow higher-kinded types
-    "-language:implicitConversions",     // Allow definition of implicit functions called views
-    "-unchecked",                        // Enable additional warnings where generated code depends on assumptions.
-    "-Xcheckinit",                       // Wrap field accessors to throw an exception on uninitialized access.
-    "-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
-    "-Xfuture",                          // Turn on future language features.
-    "-Xlint:adapted-args",               // Warn if an argument list is modified to match the receiver.
-    "-Xlint:by-name-right-associative",  // By-name parameter of right associative operator.
-    "-Xlint:constant",                   // Evaluation of a constant arithmetic expression results in an error.
-    "-Xlint:delayedinit-select",         // Selecting member of DelayedInit.
-    "-Xlint:doc-detached",               // A Scaladoc comment appears to be detached from its element.
-    "-Xlint:inaccessible",               // Warn about inaccessible types in method signatures.
-    "-Xlint:infer-any",                  // Warn when a type argument is inferred to be `Any`.
-    "-Xlint:missing-interpolator",       // A string literal appears to be missing an interpolator id.
-    "-Xlint:nullary-override",           // Warn when non-nullary `def f()' overrides nullary `def f'.
-    "-Xlint:nullary-unit",               // Warn when nullary methods return Unit.
-    "-Xlint:option-implicit",            // Option.apply used implicit view.
-    "-Xlint:package-object-classes",     // Class or object defined in package object.
-    "-Xlint:poly-implicit-overload",     // Parameterized overloaded implicit methods are not visible as view bounds.
-    "-Xlint:private-shadow",             // A private field (or class parameter) shadows a superclass field.
-    "-Xlint:stars-align",                // Pattern sequence wildcard must align with sequence component.
-    "-Xlint:type-parameter-shadow",      // A local type parameter shadows a type already in scope.
-    "-Xlint:unsound-match",              // Pattern match may not be typesafe.
-    "-Yno-adapted-args",                 // Do not adapt an argument list (either by inserting () or creating a tuple) to match the receiver.
-    "-Ypartial-unification",             // Enable partial unification in type constructor inference
-    "-Ywarn-extra-implicit",             // Warn when more than one implicit parameter section is defined.
-    "-Ywarn-inaccessible",               // Warn about inaccessible types in method signatures.
-    "-Ywarn-infer-any",                  // Warn when a type argument is inferred to be `Any`.
-    "-Ywarn-nullary-override",           // Warn when non-nullary `def f()' overrides nullary `def f'.
-    "-Ywarn-nullary-unit",               // Warn when nullary methods return Unit.
-    "-Ywarn-numeric-widen",              // Warn when numerics are widened.
-    "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
-    "-Ywarn-unused:imports",             // Warn if an import selector is not referenced.
-    "-Ywarn-unused:locals",              // Warn if a local definition is unused.
-    // "-Ywarn-unused:params",              // Warn if a value parameter is unused.
-    // "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
-    "-Ywarn-unused:privates",            // Warn if a private member is unused.
-    "-Ywarn-value-discard",              // Warn when non-Unit expression results are unused.
-    "-P:scalajs:sjsDefinedByDefault",
-    "-Yrangepos"
+  val scalacOptions = if (isScalaJSVersion06) Seq("-P:scalajs:sjsDefinedByDefault") else Nil
+
+  val stIgnore = List(
+    "react-dom",
+    "@material-ui/core",
+    "@material-ui/icons",
+    "@material-ui/lab",
+    "@material-ui/types"
+  )
+
+  lazy val rootProject: Project => Project = _.settings(
+    name := "scalajs-react-material-ui",
+    skip in publish := true,
+    skip in publishLocal := true,
+    skip in publishArtifact := true,
+    Keys.`package` := file("")
   )
 }

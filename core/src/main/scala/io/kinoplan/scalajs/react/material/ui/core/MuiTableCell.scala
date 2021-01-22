@@ -1,10 +1,10 @@
 package io.kinoplan.scalajs.react.material.ui.core
 
-import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
+
+import io.kinoplan.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
 
 object MuiTableCell extends ReactBridgeComponent with MuiTableCellExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
@@ -16,7 +16,7 @@ object MuiTableCell extends ReactBridgeComponent with MuiTableCellExtensions {
   def apply(
     align: js.UndefOr[Alignment.Value] = js.undefined,
     classes: js.UndefOr[Map[ClassKey.Value, String]] = js.undefined,
-    component: OptComponentPropType = js.undefined,
+    component: js.UndefOr[ComponentPropType] = js.undefined,
     padding: js.UndefOr[Padding.Value] = js.undefined,
     scope: js.UndefOr[String] = js.undefined,
     sortDirection: js.UndefOr[Boolean | SortDirection.Value] = js.undefined,

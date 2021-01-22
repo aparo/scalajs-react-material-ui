@@ -1,13 +1,14 @@
 package io.kinoplan.demo.components.demos.Progress
 
+import scala.scalajs.js
+
+import japgolly.scalajs.react.{BackendScope, Callback, ScalaComponent}
+import japgolly.scalajs.react.vdom.all._
+import scalacss.ScalaCssReactImplicits
+
 import io.kinoplan.demo.components.ComponentContainer
 import io.kinoplan.demo.styles.demos.Progress.{CircularProgressStyle, DefaultCircularProgressStyle}
 import io.kinoplan.scalajs.react.material.ui.core.MuiCircularProgress
-import japgolly.scalajs.react.vdom.all._
-import japgolly.scalajs.react.{BackendScope, Callback, ScalaComponent}
-import scalacss.ScalaCssReactImplicits
-
-import scala.scalajs.js
 
 object CircularDeterminate extends ScalaCssReactImplicits {
   case class Props(style: CircularProgressStyle)
@@ -54,7 +55,7 @@ object CircularDeterminate extends ScalaCssReactImplicits {
   private val component = ScalaComponent.builder[Props]("CircularDeterminate")
     .initialState(State())
     .renderBackend[Backend]
-    .componentWillMount(_.backend.mount)
+    .componentDidMount(_.backend.mount)
     .componentWillUnmount(_.backend.unmount)
     .build
 

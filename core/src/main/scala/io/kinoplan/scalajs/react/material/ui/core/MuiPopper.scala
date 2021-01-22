@@ -1,11 +1,12 @@
 package io.kinoplan.scalajs.react.material.ui.core
 
-import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
-import org.scalajs.dom.html
-
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
+
+import org.scalajs.dom.html
+
+import io.kinoplan.scalajs.react.bridge.{ReactBridgeComponent, WithProps}
 
 object MuiPopper extends ReactBridgeComponent with MuiPopperExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
@@ -16,7 +17,7 @@ object MuiPopper extends ReactBridgeComponent with MuiPopperExtensions {
 
   def apply(
     anchorEl: js.UndefOr[html.Element | js.Function1[html.Element, html.Element]] = js.undefined,
-    container: OptComponentContainerType = js.undefined,
+    container: js.UndefOr[ComponentRefType] = js.undefined,
     disablePortal: js.UndefOr[Boolean] = js.undefined,
     keepMounted: js.UndefOr[Boolean] = js.undefined,
     modifiers: js.UndefOr[js.Object] = js.undefined,

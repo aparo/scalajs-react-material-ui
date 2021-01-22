@@ -1,17 +1,20 @@
 package io.kinoplan.demo.components.demos.Menus
 
-import io.kinoplan.demo.components.ComponentContainer
-import io.kinoplan.scalajs.react.material.ui.core.{MuiButton, MuiFade, MuiMenu, MuiMenuItem}
-import japgolly.scalajs.react.vdom.all._
-import japgolly.scalajs.react.{BackendScope, Callback, ReactEvent, ReactEventFromHtml, ScalaComponent}
-import org.scalajs.dom.raw.HTMLElement
-import scalacss.ScalaCssReactImplicits
-
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
 
+import japgolly.scalajs.react.{BackendScope, Callback, ReactEvent, ReactEventFromHtml, ScalaComponent}
+import japgolly.scalajs.react.vdom.all._
+import org.scalajs.dom.raw.HTMLElement
+import scalacss.ScalaCssReactImplicits
+
+import io.kinoplan.demo.components.ComponentContainer
+import io.kinoplan.scalajs.react.material.ui.core.{MuiButton, MuiFade, MuiMenu, MuiMenuItem}
+
 object FadeMenu extends ScalaCssReactImplicits {
+  @js.native
   trait JsObject extends js.Object
+
   case class State(anchorEl: Option[HTMLElement] = None) {
     val isMenuOpen = anchorEl.nonEmpty
 
@@ -40,7 +43,7 @@ object FadeMenu extends ScalaCssReactImplicits {
           div(
             MuiButton()(
               aria.owns := ariaOwns,
-              aria.hasPopup := "true",
+              aria.haspopup.`true`,
               onClick ==> handleClick,
               "Open with fade transition  "
             ),

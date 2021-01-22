@@ -1,11 +1,12 @@
 package io.kinoplan.demo.components.demos.Dialogs
 
-import io.kinoplan.scalajs.react.material.ui.core.{MuiButton, MuiDialog, MuiDialogActions, MuiDialogContent, MuiDialogTitle, MuiFormControlLabel, MuiRadio, MuiRadioGroup}
+import scala.scalajs.js
+
+import japgolly.scalajs.react.{BackendScope, Callback, ReactEventFromInput, ScalaComponent}
 import japgolly.scalajs.react.vdom.Attr
 import japgolly.scalajs.react.vdom.all._
-import japgolly.scalajs.react.{BackendScope, Callback, ReactEventFromInput, ScalaComponent}
 
-import scala.scalajs.js
+import io.kinoplan.scalajs.react.material.ui.core.{MuiButton, MuiDialog, MuiDialogActions, MuiDialogContent, MuiDialogTitle, MuiFormControlLabel, MuiRadio, MuiRadioGroup}
 
 object ConfirmationDialogRaw {
   case class Props(open: Boolean, onClose: js.Function1[String, Callback], value: String, dialogClassess: Map[String, String])
@@ -20,7 +21,7 @@ object ConfirmationDialogRaw {
   )
 
   class Backend(t: BackendScope[Props, State]) {
-    def componentWillReceiveProps(currentProps: Props, nextProps: Props): Callback = {
+    def componentDidUpdate(currentProps: Props, nextProps: Props): Callback = {
       t.modState(_.setValue(nextProps.value)).when_(nextProps.value != currentProps.value)
     }
 
@@ -90,7 +91,7 @@ object ConfirmationDialogRaw {
   private val component = ScalaComponent.builder[Props]("ConfirmationDialogRaw")
     .initialStateFromProps(props => State(props.value))
     .renderBackend[Backend]
-    .componentWillReceiveProps(f => f.backend.componentWillReceiveProps(f.currentProps, f.nextProps))
+    .componentDidUpdate(f => f.backend.componentDidUpdate(f.prevProps, f.currentProps))
     .build
 
   def apply(
