@@ -11,7 +11,7 @@ import scala.scalajs.js.|
 object MuiAlert extends ReactBridgeComponent with MuiAlertExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
 
-  @JSImport("@material-ui/labs", "Alert")
+  @JSImport("@material-ui/lab", "Alert")
   @js.native
   object RawComponent extends js.Function
 

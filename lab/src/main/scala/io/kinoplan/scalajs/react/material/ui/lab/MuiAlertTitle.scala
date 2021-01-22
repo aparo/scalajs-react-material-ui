@@ -8,7 +8,7 @@ import scala.scalajs.js.annotation.JSImport
 object MuiAlertTitle extends ReactBridgeComponent with MuiAlertTitleExtensions {
   override protected lazy val componentValue: js.Function = RawComponent
 
-  @JSImport("@material-ui/labs", "AlertTitle")
+  @JSImport("@material-ui/lab", "AlertTitle")
   @js.native
   object RawComponent extends js.Function
 
