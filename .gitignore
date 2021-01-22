@@ -3,10 +3,13 @@
 target/
 .idea/
 .metals/
+.vscode/
 .bloop/
 .bsp/
 local.*
 node_modules/
 package-lock.json
 yarn.lock
-.DS_Store
+.DS_Storecredentials.sbt
+project/metals.sbt
+project/project

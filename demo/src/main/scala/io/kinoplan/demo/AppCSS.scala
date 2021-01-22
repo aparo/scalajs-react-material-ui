@@ -30,11 +30,15 @@ import io.kinoplan.demo.styles.demos.Tables._
 import io.kinoplan.demo.styles.demos.Tabs._
 import io.kinoplan.demo.styles.demos.TextFields._
 import io.kinoplan.demo.styles.demos.Tooltips._
-import io.kinoplan.demo.styles.labs.Breadcrumbs.{DefaultBreadcrumbsStyle, DefaultCustomizedBreadcrumbsStyle}
-import io.kinoplan.demo.styles.labs.Slider.{DefaultDisabledSliderStyle, DefaultSliderStyle, DefaultVerticalSliderStyle}
+import io.kinoplan.demo.styles.demos.Breadcrumbs.{DefaultBreadcrumbsStyle, DefaultCustomizedBreadcrumbsStyle}
+import io.kinoplan.demo.styles.demos.Slider.{DefaultDisabledSliderStyle, DefaultSliderStyle, DefaultVerticalSliderStyle}
 import io.kinoplan.demo.styles.labs.SpeedDial.DefaultSpeedDialStyle
 import io.kinoplan.demo.styles.labs.ToggleButton.DefaultToggleButtonStyle
 import io.kinoplan.demo.utils.CSSUtils
+import io.kinoplan.demo.styles.DefaultMuiListItemTextStyle
+import io.kinoplan.demo.styles.labs.Alert.DefaultAlertStyle
+import io.kinoplan.demo.styles.labs.Skeleton.DefaultSkeletonStyle
+import io.kinoplan.demo.styles.labs.Treeview.DefaultTreeViewStyle
 
 object AppCSS extends ScalaCssReactImplicits {
   val registry = new StyleSheetRegistry
@@ -134,7 +138,11 @@ object AppCSS extends ScalaCssReactImplicits {
       DefaultDisabledSliderStyle,
       DefaultVerticalSliderStyle,
       DefaultToggleButtonStyle,
-      DefaultSpeedDialStyle
+      DefaultAlertStyle,
+      DefaultSkeletonStyle,
+      DefaultSpeedDialStyle,
+      DefaultMuiListItemTextStyle,
+      DefaultTreeViewStyle
     )
 
     registry.onRegistrationN { ss =>

@@ -18,8 +18,8 @@ object SnackbarsPage {
         PositionedSnackbar(),
         LongTextSnackbar(),
         ConsecutiveSnackbars(),
-        FabIntegrationSnackbar(),
-        FadeSnackbar()
+        FabIntegrationSnackbar()//,
+//        FadeSnackbar()
       )
     }
   }

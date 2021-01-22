@@ -13,6 +13,7 @@ object ChildMenuItem {
     ChildMenuItem("Avatars", DemoAvatarsRoute),
     ChildMenuItem("Badges", DemoBadgesRoute),
     ChildMenuItem("Bottom Navigation", DemoBottomNavigationRoute),
+    ChildMenuItem("Breadcrumbs", DemoBreadcrumbsRoute),
     ChildMenuItem("Buttons", DemoButtonsRoute),
     ChildMenuItem("Cards", DemoCardsRoute),
     ChildMenuItem("Chips", DemoChipsRoute),
@@ -28,6 +29,7 @@ object ChildMenuItem {
     ChildMenuItem("Progress", DemoProgressRoute),
     ChildMenuItem("Selection Controls", DemoSelectionControlsRoute),
     ChildMenuItem("Selects", DemoSelectsRoute),
+    ChildMenuItem("Slider", DemoSliderRoute),
     ChildMenuItem("Snackbars", DemoSnackbarsRoute),
     ChildMenuItem("Steppers", DemoSteppersRoute),
     ChildMenuItem("Tables", DemoTablesRoute),
@@ -37,9 +39,10 @@ object ChildMenuItem {
   )
 
   val labs = List(
-    ChildMenuItem("Breadcrumbs", LabBreadcrumbsRoute),
-    ChildMenuItem("Slider", LabSliderRoute),
+    ChildMenuItem("Alert", LabAlertRoute),
+    ChildMenuItem("Skeleton", LabSkeletonRoute),
     ChildMenuItem("Speed Dial", LabSpeedDialRoute),
     ChildMenuItem("Toggle Button", LabToggleButtonRoute),
+    ChildMenuItem("Treeview", LabTreeViewPageRoute)
   )
 }

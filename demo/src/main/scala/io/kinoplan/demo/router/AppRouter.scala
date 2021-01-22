@@ -5,16 +5,18 @@ import japgolly.scalajs.react.extra.router._
 import io.kinoplan.demo.components.Layout
 import io.kinoplan.demo.pages.SimpleTablePage
 import io.kinoplan.demo.pages.demos._
-import io.kinoplan.demo.pages.labs.{BreadcrumbsPage, SliderPage, SpeedDialPage, ToggleButtonPage}
+import io.kinoplan.demo.pages.labs.{AlertPage, SkeletonPage, SpeedDialPage, ToggleButtonPage, TreeViewPage}
 
 object AppRouter {
   sealed trait Page
 
   case object DashboardRoute extends Page
+  case object OrderRoute extends Page
   case object DemoAppBarRoute extends Page
   case object DemoAvatarsRoute extends Page
   case object DemoBadgesRoute extends Page
   case object DemoBottomNavigationRoute extends Page
+  case object DemoBreadcrumbsRoute extends Page
   case object DemoButtonsRoute extends Page
   case object DemoCardsRoute extends Page
   case object DemoChipsRoute extends Page
@@ -30,6 +32,7 @@ object AppRouter {
   case object DemoProgressRoute extends Page
   case object DemoSelectionControlsRoute extends Page
   case object DemoSelectsRoute extends Page
+  case object DemoSliderRoute extends Page
   case object DemoSnackbarsRoute extends Page
   case object DemoSteppersRoute extends Page
   case object DemoTablesRoute extends Page
@@ -37,20 +40,24 @@ object AppRouter {
   case object DemoTextFieldsRoute extends Page
   case object DemoTooltipsRoute extends Page
 
-  case object LabBreadcrumbsRoute extends Page
-  case object LabSliderRoute extends Page
+  case object LabAlertRoute extends Page
+  case object LabSkeletonRoute extends Page
   case object LabSpeedDialRoute extends Page
   case object LabToggleButtonRoute extends Page
+  case object LabTreeViewPageRoute extends Page
+
 
   val routerConfig = RouterConfigDsl[Page].buildConfig { dsl =>
     import dsl._
 
     (
       staticRoute("/", DashboardRoute) ~> renderR(SimpleTablePage(_))
+      | staticRoute("/#demos/order/", OrderRoute) ~> renderR(SimpleTablePage(_))
       | staticRoute("/#demos/app-bar/", DemoAppBarRoute) ~> renderR(AppBarPage(_))
       | staticRoute("/#demos/avatars/", DemoAvatarsRoute) ~> renderR(AvatarsPage(_))
       | staticRoute("/#demos/badges/", DemoBadgesRoute) ~> renderR(BadgesPage(_))
       | staticRoute("/#demos/bottom-navigation/", DemoBottomNavigationRoute) ~> renderR(BottomNavigationPage(_))
+      | staticRoute("/#demos/breadcrumbs/", DemoBreadcrumbsRoute) ~> renderR(BreadcrumbsPage(_))
       | staticRoute("/#demos/buttons/", DemoButtonsRoute) ~> renderR(ButtonsPage(_))
       | staticRoute("/#demos/cards/", DemoCardsRoute) ~> renderR(CardsPage(_))
       | staticRoute("/#demos/chips/", DemoChipsRoute) ~> renderR(ChipsPage(_))
@@ -66,16 +73,19 @@ object AppRouter {
       | staticRoute("/#demos/progress/", DemoProgressRoute) ~> renderR(ProgressPage(_))
       | staticRoute("/#demos/selection-controls/", DemoSelectionControlsRoute) ~> renderR(SelectionControlsPage(_))
       | staticRoute("/#demos/selects/", DemoSelectsRoute) ~> renderR(SelectsPage(_))
+      | staticRoute("/#demos/slider/", DemoSliderRoute) ~> renderR(SliderPage(_))
       | staticRoute("/#demos/snackbars/", DemoSnackbarsRoute) ~> renderR(SnackbarsPage(_))
       | staticRoute("/#demos/steppers/", DemoSteppersRoute) ~> renderR(SteppersPage(_))
       | staticRoute("/#demos/tables/", DemoTablesRoute) ~> renderR(TablesPage(_))
       | staticRoute("/#demos/tabs/", DemoTabsRoute) ~> renderR(TabsPage(_))
       | staticRoute("/#demos/text-fields/", DemoTextFieldsRoute) ~> renderR(TextFieldsPage(_))
       | staticRoute("/#demos/tooltips/", DemoTooltipsRoute) ~> renderR(TooltipsPage(_))
-      | staticRoute("/#lab/breadcrumbs/", LabBreadcrumbsRoute) ~> renderR(BreadcrumbsPage(_))
-      | staticRoute("/#lab/slider/", LabSliderRoute) ~> renderR(SliderPage(_))
+        | staticRoute("/#lab/alert/", LabAlertRoute) ~> renderR(AlertPage(_))
+        | staticRoute("/#lab/skeleton/", LabSkeletonRoute) ~> renderR(SkeletonPage(_))
       | staticRoute("/#lab/speed-dial/", LabSpeedDialRoute) ~> renderR(SpeedDialPage(_))
       | staticRoute("/#lab/toggle-button/", LabToggleButtonRoute) ~> renderR(ToggleButtonPage(_))
+      | staticRoute("/#lab/treeview/", LabTreeViewPageRoute) ~> renderR(TreeViewPage(_))
+
     ).notFound(redirectToPage(DashboardRoute)(SetRouteVia.HistoryReplace))
   }.renderWith(layout)
 

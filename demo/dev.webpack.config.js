@@ -8,8 +8,9 @@ module.exports.devServer = {
         __dirname,
         path.join(__dirname, "../../../../src/main/resources")
     ],
-    watchContentBase: true
-    // hot: true
+    watchContentBase: true,
+    port: 8000,
+    hot: true
 };
 
 module.exports.mode = "development";
